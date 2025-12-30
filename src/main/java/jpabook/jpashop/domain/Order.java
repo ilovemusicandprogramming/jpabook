@@ -22,7 +22,7 @@ public class Order {
 
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id") //연관관계주인은 FK있는 쪽으로 주는 것이 좋음
+    @JoinColumn(name = "member_id") //연관관계주인은 FK 있는 쪽으로 주는 것이 좋음
     private Member member;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
@@ -32,7 +32,7 @@ public class Order {
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
     
-    //java 8에서는 hibernate mappping 해줌
+    //java 8에서는 hibernate mapping 해줌
     private LocalDateTime orderDate;
 
     @Enumerated(EnumType.STRING)
