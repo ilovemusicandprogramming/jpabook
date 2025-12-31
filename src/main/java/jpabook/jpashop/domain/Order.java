@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity

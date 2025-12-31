@@ -101,4 +101,22 @@ public class OrderRepository {
                                      " join fetch o.delivery d", Order.class
                 ).getResultList();
     }
+
+    public List<Order> findAllWithItem() {
+
+        /**
+         * springBoot 3.X 버전은 hibernate 6 를 사용하는데,
+         * Hibernate6 버전은 페치 조인 사용 시 자동으로 중복 제거를 하도록 변경(distinct)
+         * db의 distinct 와 다르게 row 가 완전히 같지 않더라도,
+         * order(root, entity) 가 같으면 애플리케이션 단에서 중복 건 제거 처리
+         */
+        return em.createQuery(
+                        // distinct 생략
+                        "select o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d" +
+                                " join fetch o.orderItems oi" +
+                                " join fetch oi.item i", Order.class)
+                .getResultList();
+    }
 }
