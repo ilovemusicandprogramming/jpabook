@@ -10,6 +10,7 @@ import jpabook.jpashop.repository.order.query.OrderFlatDto;
 import jpabook.jpashop.repository.order.query.OrderItemQueryDto;
 import jpabook.jpashop.repository.order.query.OrderQueryDto;
 import jpabook.jpashop.repository.order.query.OrderQueryRepository;
+import jpabook.jpashop.service.query.OrderQueryService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,24 +68,21 @@ public class OrderApiController {
      * V3. 엔티티를 조회해서 DTO로 변환(fetch join 사용O)
      * - 페이징 시에는 N 부분을 포기해야함(일대다 페치조인)
      * (대신에 batch fetch size? 옵션 주면 N -> 1 쿼리로 변경 가능)
-     *
+     * <p>
      * 페치 조인으로 SQL이 1번만 실행됨
      * `distinct` 를 사용한 이유는 1대다 조인이 있으므로 데이터베이스 row가 증가한다. 그 결과 같은 order 엔티티
      * 의 조회 수도 증가하게 된다. JPA의 distinct는 SQL에 distinct를 추가하고, 더해서 같은 엔티티가 조회되면,
      * 애플리케이션에서 중복을 걸러준다. 이 예에서 order가 컬렉션 페치 조인 때문에 중복 조회 되는 것을 막아준다.
-     *
+     * <p>
      * 단점
      * 페이징 불가능
      */
+
+    private final OrderQueryService orderQueryService;
+
     @GetMapping("/api/v3/orders")
-    public List<OrderDto> ordersV3page(){
-        List<Order> orders = orderRepository.findAllWithItem();
-
-        List<OrderDto> result = orders.stream()
-                .map(o -> new OrderDto(o))
-                .collect(toList());
-
-        return result;
+    public List<jpabook.jpashop.service.query.OrderDto> ordersV3page(){
+        return orderQueryService.ordersV3();
     }
 
     /**
